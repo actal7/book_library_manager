@@ -1,5 +1,6 @@
 package Templates;
 
+import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +40,24 @@ public class Book {
         this.available = available;
         this.returnDate = returnDate;
         this.borrowedBy = borrowedBy;
+        this.isbn = isbn;
+    }
+
+    public Book(String title, String author, int pageCount, String dateWritten, List<SectionEnum> sections, String isbn) {
+        this.id = UUID.randomUUID();
+        this.title = title;
+        this.author = author;
+        this.pageCount = pageCount;
+        this.date = null;
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            date = format.parse(dateWritten);
+            System.out.println(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        this.sectionEnums = sections;
+        this.available = true;
         this.isbn = isbn;
     }
 

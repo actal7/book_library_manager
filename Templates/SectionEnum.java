@@ -9,5 +9,6 @@ public enum SectionEnum {
     ART,
     MYSTERY,
     BIOGRAPHY,
-    FANTASY
+    FANTASY,
+    SCIFI
 }
