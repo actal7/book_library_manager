@@ -9,7 +9,6 @@ public class Reader {
     private UUID id;
     private String name;
     private List<UUID> borrowedBooks;
-
     private int bookReturnScore;
     private int maxBooks = Constants.REGULAR_MAX_BOOKS;
     private int maxBorrowPeriod = Constants.REGULAR_PERIOD;

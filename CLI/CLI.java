@@ -46,7 +46,6 @@ class MainState extends State {
             }
             default -> {
             }
-            // Handle invalid input?
         }
     }
 }
@@ -59,9 +58,11 @@ class ReadersOperationsState extends State {
             case "0" ->
                 // Switch to MainState
                     CLI.setState(new MainState());
-            case "1" ->
+            case "1" -> {
                 // Add reader
-                    controller.addReader(controller.addReaderWizard());
+                controller.addReader(controller.addReaderWizard());
+                controller.addAudit("Added reader", new Timestamp(System.currentTimeMillis()));
+            }
             case "2" -> {
                 // Delete reader
                 System.out.println("Enter reader id to delete:");
@@ -70,6 +71,7 @@ class ReadersOperationsState extends State {
                 } catch (IllegalArgumentException e) {
                     System.out.println("Invalid UUID. Please try again.");
                 }
+                controller.addAudit("Attempted to delete reader", new Timestamp(System.currentTimeMillis()));
             }
             case "3" -> {
                 // Print reader (by name/id)
@@ -77,44 +79,18 @@ class ReadersOperationsState extends State {
                 String readerQuery = scanner.nextLine();
 //                System.out.println("Printing reader: " + readerQuery);
                 controller.printReaders(controller.searchReaders(readerQuery));
+                controller.addAudit("Searched reader: " + readerQuery, new Timestamp(System.currentTimeMillis()));
             }
-            case "4" ->
+            case "4" -> {
                 // Print all readers
-                    controller.printReaders(controller.getAllReaders());
+                controller.printReaders(controller.getAllReaders());
+                controller.addAudit("Printed all readers", new Timestamp(System.currentTimeMillis()));
+            }
+
             default -> System.out.println("Invalid command. Please try again.");
         }
     }
 }
-
-//class PrintBooksState extends State {
-//    void handle() {
-//        System.out.println("Enter command: \n 0) Return to Books Operations \n 1) Print all books \n 2) Print book (by name/id)");
-//        String input = scanner.nextLine();
-//        switch (input) {
-//            case "0":
-//                // Switch to MainState
-//                CLI.setState(new BooksOperationsState());
-//                break;
-//            case "1":
-//                // Print all books
-//                System.out.println("Printing all books:");
-//                controller.addAudit("Print all books", new Timestamp(System.currentTimeMillis()));
-//                controller.printBooks(controller.getAllBooks());
-//                // printAllBooks();
-//                break;
-//            case "2":
-//                // Print book (by name/id)
-//                System.out.println("Enter book name or id to print:");
-//                // modify the line above to scan a whole line instead of a single word
-//                String bookQuery = scanner.nextLine();
-//
-//                System.out.println("Printing book: " + bookQuery);
-//                break;
-//            default:
-//                System.out.println("Invalid command. Please try again.");
-//        }
-//    }
-//}
 
 class BooksOperationsState extends State {
     void handle() throws SQLException {
@@ -128,6 +104,7 @@ class BooksOperationsState extends State {
                 // Add book
                 Book book = controller.addBookWizard();
                 controller.addBook(book);
+                controller.addAudit("Attempted to add book: " + book.getId(), new Timestamp(System.currentTimeMillis()));
             }
             case "2" -> {
                 // Delete book
@@ -135,6 +112,7 @@ class BooksOperationsState extends State {
                 String bookId = scanner.nextLine();
                 System.out.println("Attempting to delete book: " + bookId);
                 controller.deleteBook(bookId);
+                controller.addAudit("Attempted to delete book: " + bookId, new Timestamp(System.currentTimeMillis()));
             }
             case "3" ->
                 // Borrow book
@@ -144,6 +122,7 @@ class BooksOperationsState extends State {
                 System.out.println("Enter book id to return:");
                 String returnBookId = scanner.nextLine();
                 controller.returnBook(returnBookId);
+                controller.addAudit("Attempted to return book: " + returnBookId, new Timestamp(System.currentTimeMillis()));
             }
             case "5" -> {
                 // Search book
@@ -151,12 +130,14 @@ class BooksOperationsState extends State {
                 String searchQuery = scanner.nextLine();
                 System.out.println("Searching for book: " + searchQuery);
                 controller.printBooks(controller.searchBooks(searchQuery));
+                controller.addAudit("Searched book: " + searchQuery, new Timestamp(System.currentTimeMillis()));
             }
             case "6" -> {
-                // Print books menu
+                // Print books
                 System.out.println("Printing all books:");
                 controller.addAudit("Print all books", new Timestamp(System.currentTimeMillis()));
                 controller.printBooks(controller.getAllBooks());
+                controller.addAudit("Printed all books", new Timestamp(System.currentTimeMillis()));
             }
             // printAllBooks();
             default -> System.out.println("Invalid command. Please try again.");
@@ -174,23 +155,27 @@ class AuthorsOperationsState extends State {
                     CLI.setState(new MainState());
             case "1" ->
                 // Add author
-                    controller.addAuthor(controller.addAuthorWizard());
+               controller.addAuthor(controller.addAuthorWizard());
+//               controller.addAudit("Attempted to add author", new Timestamp(System.currentTimeMillis()));
             case "2" -> {
                 // Delete author
                 System.out.println("Enter author id to delete:");
                 String authorId = scanner.nextLine();
                 controller.deleteAuthor(authorId);
+                controller.addAudit("Attempted to delete author " + authorId, new Timestamp(System.currentTimeMillis()));
             }
             case "3" -> {
                 // Print author (by id/name)
                 System.out.println("Enter author id or name to search:");
-                String authorQuery = scanner.nextLine();
-                controller.printAuthors(controller.searchAuthors(authorQuery));
+                String authorId = scanner.nextLine();
+                controller.printAuthors(controller.searchAuthors(authorId));
+                controller.addAudit("Searched author " + authorId, new Timestamp(System.currentTimeMillis()));
             }
             case "4" -> {
                 // Print all authors
                 System.out.println("Printing all authors:");
                 controller.printAuthors(controller.getAllAuthors());
+                controller.addAudit("Printed all authors", new Timestamp(System.currentTimeMillis()));
             }
             default -> System.out.println("Invalid command. Please try again.");
         }
@@ -209,12 +194,14 @@ class SectionsOperationsState extends State {
                 // Print all sections
                 System.out.println("Printing all sections:");
                 controller.printAllSections();
+                controller.addAudit("Printed all book actions", new Timestamp(System.currentTimeMillis()));
             }
             case "2" -> {
                 // Print books in given section
                 System.out.println("Enter section:");
                 String sectionId = scanner.nextLine();
                 controller.printBooks(controller.getBooksBySection(sectionId));
+                controller.addAudit("Printed books in section " + sectionId, new Timestamp(System.currentTimeMillis()));
             }
             default -> System.out.println("Invalid command. Please try again.");
         }
@@ -247,7 +234,7 @@ public class CLI {
     private static State state;
 
     public CLI() {
-        this.state = new MainState();
+        state = new MainState();
     }
 
     public static void setState(State newState) {

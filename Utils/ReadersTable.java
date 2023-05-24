@@ -206,28 +206,4 @@ public class ReadersTable {
             System.out.println(e.getMessage());
         }
     }
-
-
-//    public void updateReader(Reader reader) throws SQLException {
-//        String sql = "UPDATE readers SET name = ?, max_books = ?, max_borrow_period = ?, borrowed_books = ? WHERE id = ?::uuid";
-//
-//        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
-//            pstmt.setString(1, reader.getName());
-//            pstmt.setInt(2, reader.getMaxBooks());
-//            pstmt.setInt(3, reader.getMaxBorrowPeriod());
-//
-//            // Convert List<UUID> to comma separated String
-//            String borrowedBooksStr = reader.getBorrowedBooks().stream()
-//                    .map(UUID::toString)
-//                    .collect(Collectors.joining(","));
-//            pstmt.setString(4, borrowedBooksStr);
-//
-//            pstmt.setString(5, reader.getId().toString());
-//
-//            pstmt.executeUpdate();
-//        } catch (SQLException e) {
-//            System.out.println("Error executing updateReader");
-//            System.out.println(e.getMessage());
-//        }
-//    }
 }

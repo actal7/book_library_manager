@@ -278,6 +278,7 @@ public class ActionController {
     }
 
     public void printBooks(List<Book> books) {
+        if (books == null) return;
         for (Book book : books) {
             System.out.println("Book Title: " + book.getTitle() + "\n" +
                     "Author: " + book.getAuthor() + "\n" +
@@ -509,6 +510,7 @@ public class ActionController {
           sectionEnum = SectionEnum.valueOf(section);
         } catch (IllegalArgumentException e) {
           System.out.println("Invalid section. Please try again.");
+          return null;
         }
 
         books = booksTable.getBooksBySection(sectionEnum);
