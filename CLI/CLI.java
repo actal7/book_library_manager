@@ -3,11 +3,9 @@ package CLI;
 import Controller.ActionController;
 import Templates.Book;
 
-import javax.swing.*;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Scanner;
-import java.sql.Date;
 import java.util.UUID;
 
 abstract class State {
@@ -22,33 +20,33 @@ class MainState extends State {
         String input = scanner.nextLine();
 
         switch (input) {
-            case "0":
+            case "0" -> {
                 System.out.println("Exiting...");
                 CLI.shouldExit = true;
-                break;
-            case "1":
+            }
+            case "1" -> {
                 System.out.println("Switching to Readers Operations");
                 CLI.setState(new ReadersOperationsState());
-                break;
-            case "2":
+            }
+            case "2" -> {
                 System.out.println("Switching to Books Operations");
                 CLI.setState(new BooksOperationsState());
-                break;
-            case "3":
+            }
+            case "3" -> {
                 System.out.println("> AUTHOR OPERATIONS <");
                 CLI.setState(new AuthorsOperationsState());
-                break;
-            case "4":
+            }
+            case "4" -> {
                 System.out.println("> SECTIONS OPERATIONS <");
                 CLI.setState(new SectionsOperationsState());
-                break;
-            case "5":
+            }
+            case "5" -> {
                 System.out.println("> AUDIT OPERATIONS <");
                 CLI.setState(new AuditOperationsState());
-                break;
-            default:
-                // Handle invalid input?
-                break;
+            }
+            default -> {
+            }
+            // Handle invalid input?
         }
     }
 }
@@ -58,15 +56,13 @@ class ReadersOperationsState extends State {
         System.out.println("Enter command:\n 0) Return to Main\n 1) Add reader\n 2) Delete reader\n 3) Search readers (name / id) \n 4) Print all readers");
         String input = scanner.nextLine();
         switch (input) {
-            case "0":
+            case "0" ->
                 // Switch to MainState
-                CLI.setState(new MainState());
-                break;
-            case "1":
+                    CLI.setState(new MainState());
+            case "1" ->
                 // Add reader
-                controller.addReader(controller.addReaderWizard());
-                break;
-            case "2":
+                    controller.addReader(controller.addReaderWizard());
+            case "2" -> {
                 // Delete reader
                 System.out.println("Enter reader id to delete:");
                 try {
@@ -74,20 +70,18 @@ class ReadersOperationsState extends State {
                 } catch (IllegalArgumentException e) {
                     System.out.println("Invalid UUID. Please try again.");
                 }
-                break;
-            case "3":
+            }
+            case "3" -> {
                 // Print reader (by name/id)
                 System.out.println("Enter reader name or id to print:");
                 String readerQuery = scanner.nextLine();
 //                System.out.println("Printing reader: " + readerQuery);
                 controller.printReaders(controller.searchReaders(readerQuery));
-                break;
-            case "4":
+            }
+            case "4" ->
                 // Print all readers
-                controller.printReaders(controller.getAllReaders());
-            break;
-            default:
-                System.out.println("Invalid command. Please try again.");
+                    controller.printReaders(controller.getAllReaders());
+            default -> System.out.println("Invalid command. Please try again.");
         }
     }
 }
@@ -127,48 +121,45 @@ class BooksOperationsState extends State {
         System.out.println("Enter command: \n 0) Return to Main \n 1) Add Book \n 2) Delete Book \n 3) Borrow Book \n 4) Return Book \n 5) Search Book \n 6) Show All Books");
         String input = scanner.nextLine();
         switch (input) {
-            case "0":
+            case "0" ->
                 // Switch to MainState
-                CLI.setState(new MainState());
-                break;
-            case "1":
+                    CLI.setState(new MainState());
+            case "1" -> {
                 // Add book
                 Book book = controller.addBookWizard();
                 controller.addBook(book);
-                break;
-            case "2":
+            }
+            case "2" -> {
                 // Delete book
                 System.out.println("Enter book id to delete:");
                 String bookId = scanner.nextLine();
                 System.out.println("Attempting to delete book: " + bookId);
                 controller.deleteBook(bookId);
-                break;
-            case "3":
+            }
+            case "3" ->
                 // Borrow book
-                controller.borrowBookWizard();
-                break;
-            case "4":
+                    controller.borrowBookWizard();
+            case "4" -> {
                 // Return book
                 System.out.println("Enter book id to return:");
                 String returnBookId = scanner.nextLine();
                 controller.returnBook(returnBookId);
-                break;
-            case "5":
+            }
+            case "5" -> {
                 // Search book
                 System.out.println("Enter book name or id to search:");
                 String searchQuery = scanner.nextLine();
                 System.out.println("Searching for book: " + searchQuery);
                 controller.printBooks(controller.searchBooks(searchQuery));
-                break;
-            case "6":
+            }
+            case "6" -> {
                 // Print books menu
                 System.out.println("Printing all books:");
                 controller.addAudit("Print all books", new Timestamp(System.currentTimeMillis()));
                 controller.printBooks(controller.getAllBooks());
-                // printAllBooks();
-                break;
-            default:
-                System.out.println("Invalid command. Please try again.");
+            }
+            // printAllBooks();
+            default -> System.out.println("Invalid command. Please try again.");
         }
     }
 }
@@ -178,33 +169,30 @@ class AuthorsOperationsState extends State {
         System.out.println("Enter command:\n 0) Return to main\n 1) Add author\n 2) Delete author\n 3) Search authors (name / id) \n 4) Print all authors");
         String input = scanner.nextLine();
         switch (input) {
-            case "0":
+            case "0" ->
                 // Switch to MainState
-                CLI.setState(new MainState());
-                break;
-            case "1":
+                    CLI.setState(new MainState());
+            case "1" ->
                 // Add author
-                controller.addAuthor(controller.addAuthorWizard());
-                break;
-            case "2":
+                    controller.addAuthor(controller.addAuthorWizard());
+            case "2" -> {
                 // Delete author
                 System.out.println("Enter author id to delete:");
                 String authorId = scanner.nextLine();
                 controller.deleteAuthor(authorId);
-                break;
-            case "3":
+            }
+            case "3" -> {
                 // Print author (by id/name)
                 System.out.println("Enter author id or name to search:");
                 String authorQuery = scanner.nextLine();
                 controller.printAuthors(controller.searchAuthors(authorQuery));
-                break;
-            case "4":
+            }
+            case "4" -> {
                 // Print all authors
                 System.out.println("Printing all authors:");
                 controller.printAuthors(controller.getAllAuthors());
-                break;
-            default:
-                System.out.println("Invalid command. Please try again.");
+            }
+            default -> System.out.println("Invalid command. Please try again.");
         }
     }
 }
@@ -214,23 +202,21 @@ class SectionsOperationsState extends State {
         System.out.println("Enter command:\n 0) Return to Main\n 1) Print all sections\n 2) Print books in section (by name)");
         String input = scanner.nextLine();
         switch (input) {
-            case "0":
+            case "0" ->
                 // Switch to MainState
-                CLI.setState(new MainState());
-                break;
-            case "1":
+                    CLI.setState(new MainState());
+            case "1" -> {
                 // Print all sections
                 System.out.println("Printing all sections:");
                 controller.printAllSections();
-                break;
-            case "2":
+            }
+            case "2" -> {
                 // Print books in given section
                 System.out.println("Enter section:");
                 String sectionId = scanner.nextLine();
                 controller.printBooks(controller.getBooksBySection(sectionId));
-                break;
-            default:
-                System.out.println("Invalid command. Please try again.");
+            }
+            default -> System.out.println("Invalid command. Please try again.");
         }
     }
 }
@@ -240,20 +226,18 @@ class AuditOperationsState extends State {
         System.out.println("Enter command:\n 0) Return to Main \n 1) Print last n actions");
         String input = scanner.nextLine();
         switch (input) {
-            case "0":
+            case "0" ->
                 // Switch to MainState
-                CLI.setState(new MainState());
-                break;
-            case "1":
+                    CLI.setState(new MainState());
+            case "1" -> {
                 // Print last n actions
                 System.out.println("Number of actions to display:");
                 System.out.println("Printing last n actions:");
                 int n = scanner.nextInt();
                 controller.addAudit("Printed last " + n + " actions", new Timestamp(System.currentTimeMillis()));
                 controller.printAudit(n);
-                break;
-            default:
-                System.out.println("Invalid command. Please try again.");
+            }
+            default -> System.out.println("Invalid command. Please try again.");
         }
     }
 }
