@@ -33,6 +33,4 @@ public class SectionsTable {
             e.printStackTrace();
         }
     }
-
-    // Implement other section-related operations here
 }
